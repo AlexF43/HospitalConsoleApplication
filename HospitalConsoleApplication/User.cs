@@ -15,4 +15,6 @@ public abstract class User
     }
 
     public abstract void DisplayDetails();
+
+    public abstract string ToCSVString();
 }
