@@ -29,5 +29,46 @@ static class FileManager
         }
     }
     
+    public static List<Doctor> LoadDoctors()
+    {
+        List<Doctor> patients = new List<Doctor>();
+        if (File.Exists(DOCTORS_FILE))
+        {
+            using (StreamReader reader = new StreamReader(DOCTORS_FILE))
+            {
+                while (reader.ReadLine() is { } currentLine)
+                {
+                    string[] parts = currentLine.Split(',');
+                    
+                    
+                    patients.Add(new Doctor(int.Parse(parts[0]), parts[1],
+                        parts[2], parts[3], parts[4],
+                        int.Parse(parts[5])));
+                }
+            }
+        }
+        return patients;
+    }
+    
+    public static List<Patient> LoadPatients(List<Doctor> doctors)
+    {
+        List<Patient> patients = new List<Patient>();
+        if (File.Exists(PATIENTS_FILE))
+        {
+            using (StreamReader reader = new StreamReader(PATIENTS_FILE))
+            {
+                while (reader.ReadLine() is { } currentLine)
+                {
+                    string[] parts = currentLine.Split(',');
+                    Doctor? doctor = doctors.Find(x => x.Id == int.Parse(parts[6]));
+                    patients.Add(new Patient(int.Parse(parts[0]), parts[1],
+                        parts[2], parts[3], parts[4],
+                        int.Parse(parts[5]), doctor));
+                }
+            }
+        }
+        return patients;
+    }
+    
     
 }

@@ -13,6 +13,13 @@ public abstract class User
         Name = name;
         Password = password;
     }
+    
+    protected User(int id, string name, string password)
+    {
+        Id = id;
+        Name = name;
+        Password = password;
+    }
 
     public abstract void DisplayDetails();
 

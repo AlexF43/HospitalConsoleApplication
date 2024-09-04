@@ -14,6 +14,14 @@ public class Doctor : User
         Address = address;
         PhoneNumber = phoneNumber;
     }
+    
+    public Doctor(int id, string name, string password, string email,
+        string address, int phoneNumber) : base(id, name, password)
+    {
+        Email = email;
+        Address = address;
+        PhoneNumber = phoneNumber;
+    }
 
     public override void DisplayDetails()
     {

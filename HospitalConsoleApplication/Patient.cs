@@ -6,10 +6,19 @@ public class Patient : User
     public string Email { get; }
     public string Address { get; }
     public int PhoneNumber { get; }
-    public Doctor Doctor { get; set; }
+    public Doctor? Doctor { get; set; }
 
     public Patient(string name, string password, string email,
         string address, int phoneNumber, Doctor doctor) : base(name, password)
+    {
+        Email = email;
+        Address = address;
+        PhoneNumber = phoneNumber;
+        Doctor = doctor;
+    }
+    
+    public Patient(int id, string name, string password, string email,
+        string address, int phoneNumber, Doctor? doctor) : base(id, name, password)
     {
         Email = email;
         Address = address;
