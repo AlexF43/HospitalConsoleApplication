@@ -59,7 +59,7 @@ static class FileManager
             {
                 while (reader.ReadLine() is { } currentLine)
                 {
-                    string[] parts = currentLine.Split(',');
+                    string[] parts = currentLine.Split(", ");
                     Doctor? doctor = doctors.Find(x => x.Id == int.Parse(parts[6]));
                     patients.Add(new Patient(int.Parse(parts[0]), parts[1],
                         parts[2], parts[3], parts[4],

@@ -3,24 +3,14 @@ namespace HospitalConsoleApplication;
 public class Doctor : User
 {
 
-    public string Email { get; }
-    public string Address { get; }
-    public int PhoneNumber { get; }
-
-    public Doctor(string name, string password, string email,
-        string address, int phoneNumber) : base(name, password)
+    public Doctor(string name, string password, string email, string address, int phoneNumber) :
+        base(name, password, email, address, phoneNumber)
     {
-        Email = email;
-        Address = address;
-        PhoneNumber = phoneNumber;
     }
-    
-    public Doctor(int id, string name, string password, string email,
-        string address, int phoneNumber) : base(id, name, password)
+
+    public Doctor(int id, string name, string password, string email, string address, int phoneNumber) : 
+        base(id, name, password, email, address, phoneNumber)
     {
-        Email = email;
-        Address = address;
-        PhoneNumber = phoneNumber;
     }
 
     public override void DisplayDetails()
@@ -41,7 +31,7 @@ public class Doctor : User
     public override string ToCSVString()
     {
         string csvString = Id + ", " + Name + ", " + Password + ", " + Email
-                           + ", " + Address + ", " + PhoneNumber + ", " + PhoneNumber;
+                           + ", " + Address + ", " + PhoneNumber;
         return csvString;
     } 
 }
