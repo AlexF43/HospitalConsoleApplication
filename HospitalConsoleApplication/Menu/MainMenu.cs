@@ -4,6 +4,8 @@ static class MainMenu
 {
     static List<Patient> patients;
     static List<Doctor> doctors;
+    static List<Administrator> admins;
+    static List<Appointment> appointments;
 
     static MainMenu()
     {
@@ -12,11 +14,8 @@ static class MainMenu
 
     public static void DisplayMainMenu()
     {
-        Console.WriteLine("┌──────────────────────────────────────────────────┐");
-        Console.WriteLine("│        DOTNET Hospital Management System         │");
-        Console.WriteLine("├──────────────────────────────────────────────────┤");
-        Console.WriteLine("│                     Login                        │");
-        Console.WriteLine("└──────────────────────────────────────────────────┘");
+        Console.Clear();
+        Utils.PageHeader("Login");
 
         User? user = null;
 
@@ -38,9 +37,10 @@ static class MainMenu
 
         switch (user)
         {
-            case Doctor:
+            case Doctor doctor:
                 //Doctor ui
-                Console.WriteLine("doctor");
+                DoctorMenu doctorMenu = new DoctorMenu(doctor, patients);
+                doctorMenu.DisplayDoctorMenu();
                 break;
             
             case Patient patient:
@@ -89,5 +89,7 @@ static class MainMenu
     {
         doctors = FileManager.LoadDoctors();
         patients = FileManager.LoadPatients(doctors);
+        admins = FileManager.LoadAdministrators();
+        appointments = FileManager.LoadAppointments(doctors, patients);
     }
 }

@@ -15,6 +15,7 @@ public class Doctor : User
 
     public override void DisplayDetails()
     {
+        Console.Write("| ");
         Console.Write(Name);
         Utils.WriteSpaces(20-Name.Length);
         Console.Write("| ");

@@ -1,13 +1,14 @@
 namespace HospitalConsoleApplication;
 
-public class Administrator
+public class Administrator : BaseUser
 {
-    public int Id { get; }
-    public string password { get; }
-
-    public Administrator(int id, string password)
+    public Administrator(int id, string password) : base(id, password)
     {
-        Id = id;
-        this.password = password;
     }
+    
+    public override string ToCSVString()
+    {
+        string csvString = Id + ", " + Password;
+        return csvString;
+    } 
 }

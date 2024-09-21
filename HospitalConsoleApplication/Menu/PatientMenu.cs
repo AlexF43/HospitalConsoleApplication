@@ -12,6 +12,8 @@ public class PatientMenu
     public void DisplayPatientMenu()
     {
         Console.Clear();
+        
+        Utils.PageHeader("Patient Menu");
         Console.WriteLine($"Welcome to the DOTNET hospital management system {patient.Name}");
         Console.WriteLine("");
         Console.WriteLine("Please choose an option:");
@@ -22,18 +24,29 @@ public class PatientMenu
         Console.WriteLine("5. Exit to login");
         Console.WriteLine("6. Exit system");
 
-        string option = Console.ReadLine();
-        int optionInt = int.Parse(option);
+        int optionInt;
+        Boolean validInput;
+        do
+        {
+            string option = Console.ReadLine();
+            optionInt = int.Parse(option);
+            validInput = (optionInt <= 6 && optionInt >= 1);
+            if (!validInput)
+            {
+                Console.WriteLine("Invalid Input, Please enter a number between 1 and 6");
+            }
+        } while (!validInput);
+            
         switch (optionInt)
         {
-            case 1: 
-                DisplayPatientDetails(); 
+            case 1:
+                DisplayPatientDetails();
                 break;
-            
+
             case 2:
                 DisplayDoctorDetails();
                 break;
-            
+
             case 3:
                 Console.WriteLine("appointment menu");
                 break;
@@ -43,10 +56,10 @@ public class PatientMenu
             case 5:
                 MainMenu.DisplayMainMenu();
                 break;
-            
+
             case 6:
                 break;
-            
+
             default:
                 Console.WriteLine("Invalid input");
                 break;
@@ -55,6 +68,7 @@ public class PatientMenu
 
     public void DisplayPatientDetails()
     {
+        Utils.PageHeader("My Details");
         Console.WriteLine($"{patient.Name}'s Details");
         Console.WriteLine("");
         Console.WriteLine($"Patient ID {patient.Id}");
@@ -68,22 +82,8 @@ public class PatientMenu
 
     public void DisplayDoctorDetails()
     {
-        Console.WriteLine("Your Doctor:");
-        Console.WriteLine("--");
-        Console.Write("Name");
-        Utils.WriteSpaces(16);
-        Console.Write("| ");
-        Console.Write("Email");
-        Utils.WriteSpaces(15);
-        Console.Write("| ");
-        Console.Write("Phone number");
-        Utils.WriteSpaces(1);
-        Console.Write("| ");
-        Console.Write("Address");
-        Utils.WriteSpaces(22);
-        Console.WriteLine();
-        Utils.WriteDashes(90);
-        Console.WriteLine();
+        Utils.PageHeader("My Doctor");
+        Utils.DoctorHeader();
         patient.Doctor.DisplayDetails();
         Console.ReadLine();
         DisplayPatientMenu();

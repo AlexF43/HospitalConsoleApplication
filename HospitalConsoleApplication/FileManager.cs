@@ -70,5 +70,68 @@ static class FileManager
         return patients;
     }
     
-    
+    public static void SaveAdministrators(List<Administrator> administrators)
+    {
+        using (StreamWriter writer = new StreamWriter(ADMINS_FILE))
+        {
+            foreach (var admin in administrators)
+            {
+                writer.WriteLine(admin.ToCSVString());
+            }
+        }
+    }
+
+    public static List<Administrator> LoadAdministrators()
+    {
+        List<Administrator> administrators = new List<Administrator>();
+        if (File.Exists(ADMINS_FILE))
+        {
+            using (StreamReader reader = new StreamReader(ADMINS_FILE))
+            {
+                while (reader.ReadLine() is { } currentLine)
+                {
+                    string[] parts = currentLine.Split(", ");
+                    administrators.Add(new Administrator(int.Parse(parts[0]), parts[1]));
+                }
+            }
+        }
+        return administrators;
+    }
+
+    public static void SaveAppointments(List<Appointment> appointments)
+    {
+        using (StreamWriter writer = new StreamWriter(APPOINTMENTS_FILE))
+        {
+            foreach (var appointment in appointments)
+            {
+                writer.WriteLine(appointment.ToCSVString());
+            }
+        }
+    }
+
+    public static List<Appointment> LoadAppointments(List<Doctor> doctors, List<Patient> patients)
+    {
+        List<Appointment> appointments = new List<Appointment>();
+        if (File.Exists(APPOINTMENTS_FILE))
+        {
+            using (StreamReader reader = new StreamReader(APPOINTMENTS_FILE))
+            {
+                while (reader.ReadLine() is { } currentLine)
+                {
+                    string[] parts = currentLine.Split(", ");
+                    Doctor? doctor = doctors.Find(x => x.Id == int.Parse(parts[0]));
+                    Patient? patient = patients.Find(x => x.Id == int.Parse(parts[1]));
+                    if (doctor != null && patient != null)
+                    {
+                        appointments.Add(new Appointment(doctor, patient, parts[2]));
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Warning: Could not load appointment, missing doctor or patient. Doctor ID: {parts[0]}, Patient ID: {parts[1]}");
+                    }
+                }
+            }
+        }
+        return appointments;
+    }
 }

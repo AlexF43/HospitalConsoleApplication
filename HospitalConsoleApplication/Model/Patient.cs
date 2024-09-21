@@ -16,20 +16,22 @@ public class Patient : User
 
     public override void DisplayDetails()
     {
+        Console.Write("| ");
         Console.Write(Name);
-        Utils.WriteSpaces(20-Name.Length);
-        Console.Write("|");
-        Console.Write(Doctor);
-        Utils.WriteSpaces(20-Doctor.Name.Length);
-        Console.Write("|");
+        Utils.WriteSpaces(20 - Name.Length);
+        Console.Write("| ");
+        string doctorName = Doctor?.Name ?? "No Doctor";
+        Console.Write(doctorName);
+        Utils.WriteSpaces(20 - doctorName.Length);
+        Console.Write("| ");
         Console.Write(Email);
-        Utils.WriteSpaces(20-Email.Length);
-        Console.Write("|");
+        Utils.WriteSpaces(20 - Email.Length);
+        Console.Write("| ");
         Console.Write(PhoneNumber);
-        Utils.WriteSpaces(10-PhoneNumber.ToString().Length);
-        Console.Write("|");
+        Utils.WriteSpaces(13 - PhoneNumber.ToString().Length);
+        Console.Write("| ");
         Console.Write(Address);
-        Utils.WriteSpaces(30-Address.Length);
+        Utils.WriteSpaces(30 - Address.Length);
     }
 
     public override string ToCSVString()
