@@ -2,7 +2,7 @@ namespace HospitalConsoleApplication;
 
 public class Patient : User
 {
-    private Doctor? Doctor { get; set; }
+    public Doctor? Doctor { get; set; }
 
     public Patient(string name, string password, string email, string address, int phoneNumber) : base(name, password, email, address, phoneNumber)
     {

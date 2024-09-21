@@ -19,4 +19,12 @@ static class Utils
             Console.Write(" ");
         }
     }
+
+    public static void WriteDashes(int dashes)
+    {
+        for (var i = 0; i < dashes; i++)
+        {
+            Console.Write("-");
+        }
+    }
 }

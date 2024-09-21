@@ -38,7 +38,7 @@ static class FileManager
             {
                 while (reader.ReadLine() is { } currentLine)
                 {
-                    string[] parts = currentLine.Split(',');
+                    string[] parts = currentLine.Split(", ");
                     
                     
                     patients.Add(new Doctor(int.Parse(parts[0]), parts[1],
