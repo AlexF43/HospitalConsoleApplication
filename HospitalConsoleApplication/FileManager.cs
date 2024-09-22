@@ -1,12 +1,16 @@
 namespace HospitalConsoleApplication;
 
+// filamanager, for managing file IO
 static class FileManager
 {
+    // file names
     private const string PATIENTS_FILE = "patients.txt";
     private const string DOCTORS_FILE = "doctors.txt";
     private const string ADMINS_FILE = "admins.txt";
     private const string APPOINTMENTS_FILE = "appointments.txt";
     
+    
+    // methods to save and load patients, doctors, admins and appointments to and from files.
     public static void SavePatients(List<Patient> patients)
     {
         using (StreamWriter writer = new StreamWriter(PATIENTS_FILE))
@@ -135,7 +139,7 @@ static class FileManager
                     }
                     else
                     {
-                        Console.WriteLine($"Warning: Could not load appointment, missing doctor or patient. Doctor ID: {parts[0]}, Patient ID: {parts[1]}");
+                        Console.WriteLine($"Could not load appointment as no doctor or patient was found Doctor ID: {parts[0]}, Patient ID: {parts[1]}");
                     }
                 }
             }

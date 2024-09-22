@@ -1,8 +1,8 @@
 namespace HospitalConsoleApplication;
 
+// appointment class associating a doctor with a patient
 public class Appointment
 {
-
     public Doctor Doctor { get; }
     public Patient Patient { get; }
     public string Description { get; }
@@ -14,12 +14,14 @@ public class Appointment
         Description = description;
     }
 
+    // used to convert the appointment obeject into a csv type structure for storing in the file
     public string ToCSVString()
     {
         string csvString = Doctor.Id + ", " + Patient.Id + ", " + Description;
         return csvString;
     }
 
+    // displays the appointment infomation as a row in a table
     public void DisplayDetails()
     {
         Console.Write(Doctor.Name);

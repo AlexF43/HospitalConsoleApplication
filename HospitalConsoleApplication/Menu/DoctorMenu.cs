@@ -6,6 +6,7 @@ public class DoctorMenu
     private List<Patient> _patients;
     private List<Appointment> _appointments;
 
+    // inisialise all data for the doctors screens
     public DoctorMenu(Doctor doctor, List<Patient> patients, List<Appointment> appointments)
     {
         _doctor = doctor;
@@ -13,6 +14,7 @@ public class DoctorMenu
         _appointments = appointments;
     }
 
+    // doctor menu home screen
     public void DisplayDoctorMenu()
     {
         Console.Clear();
@@ -28,19 +30,29 @@ public class DoctorMenu
         Console.WriteLine("6. Logout");
         Console.WriteLine("7. Exit");
 
-        int optionInt;
-        Boolean validInput;
+        // get and validate the user input
+        int optionInt = 0;
+        bool validInput;
         do
         {
-            string option = Console.ReadLine();
-            optionInt = int.Parse(option);
-            validInput = (optionInt <= 7 && optionInt >= 1);
+            string? option = Console.ReadLine();
+    
+            if (string.IsNullOrWhiteSpace(option) || !int.TryParse(option, out optionInt))
+            {
+                validInput = false;
+            }
+            else
+            {
+                validInput = (optionInt >= 1 && optionInt <= 7);
+            }
+
             if (!validInput)
             {
                 Console.WriteLine("Invalid Input, Please enter a number between 1 and 7");
             }
         } while (!validInput);
 
+        // display the selected next screen
         switch (optionInt)
         {
             case 1:
@@ -79,6 +91,7 @@ public class DoctorMenu
         }
     }
 
+    // display the doctors own details
     private void DisplayDoctorDetails()
     {
         Console.Clear();
@@ -92,6 +105,7 @@ public class DoctorMenu
         DisplayDoctorMenu();
     }
 
+    // display a list of the patients assigned to a doctor
     private void DisplayListOfPatients()
     {
         Console.Clear();
@@ -119,6 +133,7 @@ public class DoctorMenu
         DisplayDoctorMenu();
     }
     
+    // display all the appointments a doctor is involved with
     private void ListAppointments()
     {
         Console.Clear();
@@ -139,57 +154,98 @@ public class DoctorMenu
         DisplayDoctorMenu();
     }
 
+    // screen for a doctor to search a user by ID and see their details
     private void SearchPatientDetails()
     {
         Console.Clear();
-        Utils.PageHeader("Check Patient Details");
+        Utils.PageHeader("Patient Details");
         Console.WriteLine();
-        Console.Write("Enter the Id of the patient you would like to check: ");
-        Patient? patient;
+        Console.Write("Enter the Id of the patient who's details you are checking, or enter n to exit to the menu: ");
+        string input;
+        Patient patient = null;
         do
         {
-            var id = Console.ReadLine();
-            patient = _patients.Find(p => id != null && p.Id == int.Parse(id));
-            if (patient == null)
+            input = Console.ReadLine();
+
+            if (input.ToLower() == "n")
             {
-                Console.WriteLine("Not a valid ID, Please try again");
+                DisplayDoctorMenu();
+                return; 
+            }
+
+            if (int.TryParse(input, out int id))
+            {
+                patient = _patients.Find(p => p.Id == id);
+                if (patient == null)
+                {
+                    Console.WriteLine("Not a valid id, please try again");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input, ID's are only integers");
             }
         } while (patient == null);
-        
+
+
         Console.WriteLine();
         Utils.PatientHeader();
         patient.DisplayDetails();
         Console.WriteLine();
-        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.WriteLine("Press any key to return to the admin menu");
         Console.ReadKey();
         DisplayDoctorMenu();
     }
 
+    // screen for a doctor to search a particular patient and see all their appointments with that patient
     private void ListAppointmentsWithPatient()
     {
         Console.Clear();
-        Utils.PageHeader("Appointments With");
+        Utils.PageHeader("View Appointments with Patient");
         Console.WriteLine();
-        Console.Write("Enter the Id of the patient you would like to view appointments for: ");
-        Patient? patient;
+        Console.Write("Enter the Id of the patient whose appointments you want to view, or enter n to exit to the menu: ");
+        string input;
+        Patient patient = null;
         do
         {
-            var id = Console.ReadLine();
-            patient = _patients.Find(p => id != null && p.Id == int.Parse(id));
-            if (patient == null)
+            input = Console.ReadLine();
+
+            if (input.ToLower() == "n")
             {
-                Console.WriteLine("Not a valid ID, Please try again");
+                DisplayDoctorMenu();
+                return; 
+            }
+
+            if (int.TryParse(input, out int id))
+            {
+                patient = _patients.Find(p => p.Id == id);
+                if (patient == null)
+                {
+                    Console.WriteLine("Not a valid id, please try again");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid input, ID's are only integers");
             }
         } while (patient == null);
-        
+
         Console.WriteLine();
         Utils.AppointmentHeader();
-        List<Appointment> patientAppointments = _appointments
-            .Where(appointment => appointment.Patient.Id == patient.Id && appointment.Doctor.Id == _doctor.Id)
+        var patientAppointments = _appointments
+            .Where(a => a.Patient.Id == patient.Id && a.Doctor.Id == _doctor.Id)
             .ToList();
-        foreach (var appointment in patientAppointments)
+    
+        if (patientAppointments.Any())
         {
-            appointment.DisplayDetails();
+            foreach (var appointment in patientAppointments)
+            {
+                appointment.DisplayDetails();
+            }
+        }
+        else
+        {
+            Console.WriteLine($"No appointments found with {patient.Name}");
         }
 
         Console.WriteLine();

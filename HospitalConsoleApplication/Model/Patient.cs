@@ -1,19 +1,25 @@
 namespace HospitalConsoleApplication;
 
+// patient object, inhertis from user
 public class Patient : User
 {
     public Doctor? Doctor { get; set; }
 
+    // initialisers for manually creating, and for initialising from a file, with and without an assigned doctor
     public Patient(string name, string password, string email, string address, int phoneNumber) : base(name, password, email, address, phoneNumber)
     {
     }
 
+    public Patient(int id, string name, string password, string email, string address, int phoneNumber) : base(id, name, password, email, address, phoneNumber)
+    {
+    }
+    
     public Patient(int id, string name, string password, string email, string address, int phoneNumber, Doctor? doctor) : base(id, name, password, email, address, phoneNumber)
     {
         Doctor = doctor;
     }
     
-
+    // displays the patient data in a table row format
     public override void DisplayDetails()
     {
         Console.Write("| ");
@@ -35,6 +41,7 @@ public class Patient : User
         Console.WriteLine();
     }
 
+    // converts the patient obeject into a csv type format for file storage
     public override string ToCSVString()
     {
         string csvString;

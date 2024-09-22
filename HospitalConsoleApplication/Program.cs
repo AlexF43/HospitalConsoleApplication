@@ -6,6 +6,7 @@ using HospitalConsoleApplication;
 
 class Program
 {
+    // when the program starts, bring up the main menu
     public static void Main(string[] args)
     {
         MainMenu.DisplayMainMenu();

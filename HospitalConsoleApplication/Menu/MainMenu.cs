@@ -2,23 +2,27 @@ namespace HospitalConsoleApplication;
 
 static class MainMenu
 {
+    // lists of objects to be populated by the LoadData() function
     static List<Patient> patients;
     static List<Doctor> doctors;
     static List<Administrator> admins;
     static List<Appointment> appointments;
 
+    // constructor to initialise the data when the class is first used
     static MainMenu()
     {
         LoadData();
     }
 
+    // main menu screen
     public static void DisplayMainMenu()
     {
         Console.Clear();
         Utils.PageHeader("Login");
 
         BaseUser? user = null;
-
+        
+        // get and validate user input
         do
         {
             Console.WriteLine();
@@ -34,10 +38,10 @@ static class MainMenu
             }
         } while (user == null);
 
+        // depending on the type of user logging in, open their respecting screen
         switch (user)
         {
             case Doctor doctor:
-                //Doctor ui
                 DoctorMenu doctorMenu = new DoctorMenu(doctor, patients, appointments);
                 doctorMenu.DisplayDoctorMenu();
                 break;
@@ -48,7 +52,7 @@ static class MainMenu
                 break;
             
             case Administrator admin:
-                AdminMenu adminMenu = new AdminMenu(admin, doctors, patients, appointments);
+                AdminMenu adminMenu = new AdminMenu(doctors, patients);
                 adminMenu.DisplayAdminMenu();
                 break;
             
@@ -58,6 +62,7 @@ static class MainMenu
         }
     }
     
+    // get the entered password and replace all charactors with a *
     static string ReadPassword()
     {
         string password = "";
@@ -84,6 +89,7 @@ static class MainMenu
         return password;
     }
 
+    // authenticate a users login attempt and return their class
     public static BaseUser? Authentication(string id, string password, List<Patient> patients, List<Doctor> doctors)
     {
         // make sure id is an int
@@ -118,13 +124,22 @@ static class MainMenu
 
     static void LoadData()
     {
+        // attempt to load data
         try
         {
             doctors = FileManager.LoadDoctors();
             patients = FileManager.LoadPatients(doctors);
             admins = FileManager.LoadAdministrators();
             appointments = FileManager.LoadAppointments(doctors, patients);
+
+            // if there are no adminstrators, add an example one to be used
+            if (admins.Count == 0)
+            {
+                admins.Add(new Administrator(1, "password"));
+                FileManager.SaveAdministrators(admins);
+            }
         }
+        // if errors appear, catch them and exit the program safely
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading data: {ex.Message}");

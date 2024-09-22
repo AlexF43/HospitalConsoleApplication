@@ -1,5 +1,6 @@
 namespace HospitalConsoleApplication;
 
+// user class inherits from base user and is the parent object of patients and doctors
 public abstract class User : BaseUser
 {
     public string Name { get; }
@@ -23,6 +24,7 @@ public abstract class User : BaseUser
         PhoneNumber = phoneNumber;
     }
 
+    // child classes (doctors, patients) must implement a method to display their data in a table row format
     public abstract void DisplayDetails();
     
 }

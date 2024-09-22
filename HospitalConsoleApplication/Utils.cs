@@ -1,17 +1,10 @@
 namespace HospitalConsoleApplication;
 
+// utils class holding many useful method to be used througout the project
 static class Utils
 {
-    public static int GenerateUserId()
-    {
-        Random random = new Random();
-        int id = random.Next(1, 99999);
-        
-        //ToDo check if id is already in database
-        
-        return id;
-    }
-
+    
+    // function to print a specified number of spaces in a row
     public static void WriteSpaces(int spaces)
     {
         for (var i = 0; i < spaces; i++)
@@ -20,6 +13,7 @@ static class Utils
         }
     }
 
+    // function to print a specified number of dashes
     public static void WriteDashes(int dashes)
     {
         for (var i = 0; i < dashes; i++)
@@ -27,7 +21,16 @@ static class Utils
             Console.Write("-");
         }
     }
+    
+    // function to generate id's
+    public static int GenerateUserId()
+    {
+        Random random = new Random();
+        int id = random.Next(1000, 99999);
+        return id;
+    }
 
+    // header for a table displaying doctor infomation
     public static void DoctorHeader()
     {
         Console.Write("| Name");
@@ -47,6 +50,7 @@ static class Utils
         Console.WriteLine();
     }
 
+    // header for a table displaying patient infomation
     public static void PatientHeader()
     {
         Console.Write("| ");
@@ -68,6 +72,7 @@ static class Utils
         Console.WriteLine();
     }
 
+    // header for a table displaying appointment information
     public static void AppointmentHeader()
     {
         Console.Write("Doctor");
@@ -83,6 +88,8 @@ static class Utils
         Console.WriteLine();
     }
 
+    // header for each screen
+    // takes in a string and will print the string inside the hospital management header 
     public static void PageHeader(string text)
     {
         int lengthBefore = (50-text.Length) / 2;
