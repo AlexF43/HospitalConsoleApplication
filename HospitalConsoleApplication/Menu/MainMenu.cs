@@ -39,7 +39,7 @@ static class MainMenu
         {
             case Doctor doctor:
                 //Doctor ui
-                DoctorMenu doctorMenu = new DoctorMenu(doctor, patients);
+                DoctorMenu doctorMenu = new DoctorMenu(doctor, patients, appointments);
                 doctorMenu.DisplayDoctorMenu();
                 break;
             

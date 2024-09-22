@@ -2,20 +2,22 @@ namespace HospitalConsoleApplication;
 
 public class DoctorMenu
 {
-    private Doctor doctor;
+    private Doctor _doctor;
     private List<Patient> _patients;
+    private List<Appointment> _appointments;
 
-    public DoctorMenu(Doctor doctor, List<Patient> patients)
+    public DoctorMenu(Doctor doctor, List<Patient> patients, List<Appointment> appointments)
     {
-        this.doctor = doctor;
+        this._doctor = doctor;
         _patients = patients;
+        _appointments = appointments;
     }
 
     public void DisplayDoctorMenu()
     {
         Console.Clear();
         Utils.PageHeader("Doctor Menu");
-        Console.WriteLine($"Welcome to the DOTNET hospital management system {doctor.Name}");
+        Console.WriteLine($"Welcome to the DOTNET hospital management system {_doctor.Name}");
         Console.WriteLine("");
         Console.WriteLine("Please choose an option:");
         Console.WriteLine("1. List doctor details");
@@ -50,12 +52,13 @@ public class DoctorMenu
                 break;
 
             case 3:
-                Console.WriteLine("appointment menu");
+                ListAppointments();
                 break;
             case 4:
-                Console.WriteLine("Book Appointment");
+                SearchPatientDetails();
                 break;
             case 5:
+                ListAppointmentsWithPatient();
                 break;
 
             case 6:
@@ -75,7 +78,7 @@ public class DoctorMenu
     {
         Utils.PageHeader("My Details");
         Utils.DoctorHeader();
-        doctor.DisplayDetails();
+        _doctor.DisplayDetails();
         Console.ReadLine();
         DisplayDoctorMenu();
     }
@@ -84,7 +87,7 @@ public class DoctorMenu
     {
         Utils.PageHeader("My Patients");
         List<Patient> currentDoctorsPatients = _patients
-            .Where(patient => patient.Doctor != null && patient.Doctor.Id == doctor.Id)
+            .Where(patient => patient.Doctor != null && patient.Doctor.Id == _doctor.Id)
             .ToList();
     
         if (currentDoctorsPatients.Count == 0)
@@ -99,5 +102,78 @@ public class DoctorMenu
                 patient.DisplayDetails();
             }
         }
+
+        Console.ReadLine();
+        DisplayDoctorMenu();
+    }
+    
+    private void ListAppointments()
+    {
+        Utils.PageHeader("All Appointments");
+        Console.WriteLine();
+        Utils.AppointmentHeader();
+        List<Appointment> doctorAppointments = _appointments
+            .Where(appointment => appointment.Doctor.Id == _doctor.Id)
+            .ToList();
+        foreach (var appointment in doctorAppointments)
+        {
+            appointment.DisplayDetails();
+        }
+
+        Console.ReadLine();
+        DisplayDoctorMenu();
+    }
+
+    private void SearchPatientDetails()
+    {
+        Utils.PageHeader("Check Patient Details");
+        Console.WriteLine();
+        Console.Write("Enter the Id of the patient you would like to check: ");
+        Patient? patient;
+        do
+        {
+            var id = Console.ReadLine();
+            patient = _patients.Find(p => id != null && p.Id == int.Parse(id));
+            if (patient == null)
+            {
+                Console.WriteLine("Not a valid ID, Please try again");
+            }
+        } while (patient == null);
+        
+        Console.WriteLine();
+        Utils.PatientHeader();
+        patient.DisplayDetails();
+        Console.ReadLine();
+        DisplayDoctorMenu();
+    }
+
+    private void ListAppointmentsWithPatient()
+    {
+        Utils.PageHeader("Appointments With");
+        Console.WriteLine();
+        Console.Write("Enter the Id of the patient you would like to view appointments for: ");
+        Patient? patient;
+        do
+        {
+            var id = Console.ReadLine();
+            patient = _patients.Find(p => id != null && p.Id == int.Parse(id));
+            if (patient == null)
+            {
+                Console.WriteLine("Not a valid ID, Please try again");
+            }
+        } while (patient == null);
+        
+        Console.WriteLine();
+        Utils.AppointmentHeader();
+        List<Appointment> patientAppointments = _appointments
+            .Where(appointment => appointment.Patient.Id == patient.Id && appointment.Doctor.Id == _doctor.Id)
+            .ToList();
+        foreach (var appointment in patientAppointments)
+        {
+            appointment.DisplayDetails();
+        }
+
+        Console.ReadLine();
+        DisplayDoctorMenu();
     }
 }
