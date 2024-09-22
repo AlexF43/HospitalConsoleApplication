@@ -30,7 +30,6 @@ static class Utils
 
     public static void DoctorHeader()
     {
-        Console.WriteLine("Your Doctor:");
         Console.Write("| Name");
         WriteSpaces(16);
         Console.Write("| ");

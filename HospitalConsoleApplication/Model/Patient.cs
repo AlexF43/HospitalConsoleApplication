@@ -32,12 +32,23 @@ public class Patient : User
         Console.Write("| ");
         Console.Write(Address);
         Utils.WriteSpaces(30 - Address.Length);
+        Console.WriteLine();
     }
 
     public override string ToCSVString()
     {
-        string csvString = Id + ", " + Name + ", " + Password + ", " + Email
-            + ", " + Address + ", " + PhoneNumber + ", " + Doctor.Id;  
+        string csvString;
+        if (Doctor != null)
+        {
+            csvString = Id + ", " + Name + ", " + Password + ", " + Email
+                               + ", " + Address + ", " + PhoneNumber + ", " + Doctor.Id;  
+
+        }
+        else
+        {
+            csvString = Id + ", " + Name + ", " + Password + ", " + Email
+                               + ", " + Address + ", " + PhoneNumber;
+        }
         return csvString;
     } 
 }

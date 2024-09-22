@@ -8,7 +8,7 @@ public class DoctorMenu
 
     public DoctorMenu(Doctor doctor, List<Patient> patients, List<Appointment> appointments)
     {
-        this._doctor = doctor;
+        _doctor = doctor;
         _patients = patients;
         _appointments = appointments;
     }
@@ -66,6 +66,11 @@ public class DoctorMenu
                 break;
 
             case 7:
+                _appointments = null;
+                _doctor = null;
+                _patients = null;
+                GC.Collect();
+                Environment.Exit(1);
                 break;
 
             default:
@@ -76,15 +81,20 @@ public class DoctorMenu
 
     private void DisplayDoctorDetails()
     {
+        Console.Clear();
         Utils.PageHeader("My Details");
+        Console.WriteLine();
         Utils.DoctorHeader();
         _doctor.DisplayDetails();
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.ReadKey();
         DisplayDoctorMenu();
     }
 
     private void DisplayListOfPatients()
     {
+        Console.Clear();
         Utils.PageHeader("My Patients");
         List<Patient> currentDoctorsPatients = _patients
             .Where(patient => patient.Doctor != null && patient.Doctor.Id == _doctor.Id)
@@ -103,12 +113,15 @@ public class DoctorMenu
             }
         }
 
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.ReadKey();
         DisplayDoctorMenu();
     }
     
     private void ListAppointments()
     {
+        Console.Clear();
         Utils.PageHeader("All Appointments");
         Console.WriteLine();
         Utils.AppointmentHeader();
@@ -120,12 +133,15 @@ public class DoctorMenu
             appointment.DisplayDetails();
         }
 
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.ReadKey();
         DisplayDoctorMenu();
     }
 
     private void SearchPatientDetails()
     {
+        Console.Clear();
         Utils.PageHeader("Check Patient Details");
         Console.WriteLine();
         Console.Write("Enter the Id of the patient you would like to check: ");
@@ -143,12 +159,15 @@ public class DoctorMenu
         Console.WriteLine();
         Utils.PatientHeader();
         patient.DisplayDetails();
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.ReadKey();
         DisplayDoctorMenu();
     }
 
     private void ListAppointmentsWithPatient()
     {
+        Console.Clear();
         Utils.PageHeader("Appointments With");
         Console.WriteLine();
         Console.Write("Enter the Id of the patient you would like to view appointments for: ");
@@ -173,7 +192,9 @@ public class DoctorMenu
             appointment.DisplayDetails();
         }
 
-        Console.ReadLine();
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the doctor menu");
+        Console.ReadKey();
         DisplayDoctorMenu();
     }
 }

@@ -60,10 +60,18 @@ static class FileManager
                 while (reader.ReadLine() is { } currentLine)
                 {
                     string[] parts = currentLine.Split(", ");
-                    Doctor? doctor = doctors.Find(x => x.Id == int.Parse(parts[6]));
-                    patients.Add(new Patient(int.Parse(parts[0]), parts[1],
-                        parts[2], parts[3], parts[4],
-                        int.Parse(parts[5]), doctor));
+                    Doctor? doctor = null;
+                    if (parts.Length > 6 && !string.IsNullOrEmpty(parts[6]))
+                    {
+                        int doctorId;
+                        if (int.TryParse(parts[6], out doctorId))
+                        {
+                            doctor = doctors.Find(x => x.Id == doctorId);
+                        }
+                    }
+                    patients.Add(new Patient(int.Parse(parts[0]), parts[1], parts[2], parts[3], parts[4], int.Parse(parts[5]), 
+                        doctor
+                    ));
                 }
             }
         }

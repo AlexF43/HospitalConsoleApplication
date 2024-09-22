@@ -3,14 +3,16 @@ namespace HospitalConsoleApplication;
 public class PatientMenu
 {
     private Patient _patient;
+    private List<Patient> _patients;
     private List<Appointment> _appointments;
     private List<Doctor> _doctors;
 
-    public PatientMenu(Patient patient, List<Appointment> appointments, List<Doctor> doctors)
+    public PatientMenu(Patient patient, List<Appointment> appointments, List<Doctor> doctors, List<Patient> patients)
     {
         _patient = patient;
         _appointments = appointments;
         _doctors = doctors;
+        _patients = patients;
     }
 
     public void DisplayPatientMenu()
@@ -62,6 +64,11 @@ public class PatientMenu
                 break;
 
             case 6:
+                _patients = null;
+                _doctors = null;
+                _appointments = null;
+                GC.Collect();
+                Environment.Exit(1);
                 break;
 
             default:
@@ -72,6 +79,7 @@ public class PatientMenu
 
     public void DisplayPatientDetails()
     {
+        Console.Clear();
         Utils.PageHeader("My Details");
         Console.WriteLine($"{_patient.Name}'s Details");
         Console.WriteLine("");
@@ -80,21 +88,34 @@ public class PatientMenu
         Console.WriteLine($"Address: {_patient.Address}");
         Console.WriteLine($"Email: {_patient.Email}");
         Console.WriteLine($"Phone Number: {_patient.PhoneNumber}");
-        Console.ReadLine();
+        Console.ReadKey();
         DisplayPatientMenu();
     }
 
     public void DisplayDoctorDetails()
     {
+        Console.Clear();
         Utils.PageHeader("My Doctor");
-        Utils.DoctorHeader();
-        _patient.Doctor.DisplayDetails();
-        Console.ReadLine();
+
+        if (_patient.Doctor != null)
+        {
+            Utils.DoctorHeader();
+            _patient.Doctor.DisplayDetails();
+        }
+        else
+        {
+            Console.WriteLine("You dont currently have an assigned doctor");
+        }
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the patient menu");
+        Console.ReadKey();
         DisplayPatientMenu();
+        
     }
 
     private void ListAppointments()
     {
+        Console.Clear();
         Utils.PageHeader("My Appointments");
         Console.WriteLine();
         Console.WriteLine($"Appointments for {_patient.Name}");
@@ -107,46 +128,58 @@ public class PatientMenu
         {
             appointment.DisplayDetails();
         }
-
-        Console.ReadLine();
+        
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the patient menu");
+        Console.ReadKey();
         DisplayPatientMenu();
     }
 
     private void BookAppointment()
     {
+        Console.Clear();
         Utils.PageHeader("Book Appointment");
         if (_patient.Doctor == null)
         {
             Console.WriteLine("You are not registered with a doctor");
             Console.WriteLine("Please choose a doctor you would like to register with:");
-            var index = 1;
+            var index = 0;
             foreach (var doctor in _doctors)
             {
                 index++;
-                Console.WriteLine($"{index} ");
+                Console.Write($"{index} ");
                 doctor.DisplayDetails();
             }
-        }
-        else
-        {
-            Console.WriteLine($"You are booking a new appointment with {_patient.Doctor.Name}");
-            Console.Write("Description of appointment: ");
-            string description;
-            do
-            {
-                description = Console.ReadLine();
-                if (description == null)
-                {
-                    Console.WriteLine("Please enter a valid description");
-                }
-            } while (description == null);
 
-            Appointment appointment = new Appointment(_patient.Doctor, _patient, description);
-            _appointments.Add(appointment);
-            FileManager.SaveAppointments(_appointments);
-            Console.WriteLine("The appointment has been successfully booked");
-            Console.ReadLine();
-            DisplayPatientMenu();
+            string selectedDoctor = Console.ReadLine();
+            _patient.Doctor = _doctors[int.Parse(selectedDoctor) - 1];
+            FileManager.SavePatients(_patients);
+            Console.WriteLine($"You have successfully selected your doctor");
+            
+            Console.WriteLine();
+            Console.WriteLine("Press any key to return to the patient menu");
         }
+        
+        Console.WriteLine($"You are booking a new appointment with {_patient.Doctor.Name}");
+        Console.Write("Description of appointment: ");
+        string description;
+        do
+        {
+            description = Console.ReadLine();
+            if (description == null)
+            {
+                Console.WriteLine("Please enter a valid description");
+            }
+        } while (description == null);
+
+        Appointment appointment = new Appointment(_patient.Doctor, _patient, description);
+        _appointments.Add(appointment);
+        FileManager.SaveAppointments(_appointments);
+        Console.WriteLine("The appointment has been successfully booked");
+        Console.WriteLine();
+        Console.WriteLine("Press any key to return to the patient menu");
+        Console.ReadKey();
+        DisplayPatientMenu();
+        
     }
 }

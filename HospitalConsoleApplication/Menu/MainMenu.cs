@@ -26,7 +26,6 @@ static class MainMenu
             string id = Console.ReadLine();
             Console.Write("Password: ");
             string password = ReadPassword();
-            Console.WriteLine(id + password);
 
             user = Authentication(id, password, patients, doctors);
             if (user == null)
@@ -44,8 +43,13 @@ static class MainMenu
                 break;
             
             case Patient patient:
-                PatientMenu patientMenu = new PatientMenu(patient, appointments, doctors);
+                PatientMenu patientMenu = new PatientMenu(patient, appointments, doctors, patients);
                 patientMenu.DisplayPatientMenu();
+                break;
+            
+            case Administrator admin:
+                AdminMenu adminMenu = new AdminMenu(admin, doctors, patients, appointments);
+                adminMenu.DisplayAdminMenu();
                 break;
             
             default:
@@ -58,11 +62,17 @@ static class MainMenu
     {
         string password = "";
         ConsoleKeyInfo key;
+
         do
         {
             key = Console.ReadKey(true);
 
-            if (key.Key != ConsoleKey.Enter)
+            if (key.Key == ConsoleKey.Backspace && password.Length > 0)
+            {
+                password = password.Substring(0, password.Length - 1);
+                Console.Write("\b \b");
+            }
+            else if (!char.IsControl(key.KeyChar))
             {
                 password += key.KeyChar;
                 Console.Write("*");
@@ -76,20 +86,51 @@ static class MainMenu
 
     public static BaseUser? Authentication(string id, string password, List<Patient> patients, List<Doctor> doctors)
     {
-        var patient = patients.Find(p => p.Id.ToString() == id && p.Password == password);
+        // make sure id is an int
+        if (!int.TryParse(id, out int userId))
+        {
+            return null;
+        }
+        
+        // find if patient
+        var patient = patients.Find(delegate(Patient p)
+        {
+            return p.Id.ToString() == id && p.Password == password;
+        });
         if (patient != null) return patient;
         
-        var doctor = doctors.Find(d => d.Id.ToString() == id && d.Password == password);
+        // find if doctor
+        var doctor = doctors.Find(delegate(Doctor d)
+        {
+            return d.Id.ToString() == id && d.Password == password;
+        });
         if (doctor != null) return doctor;
+        
+        // find if admin
+        var admin = admins.Find(delegate(Administrator a)
+        {
+            return a.Id.ToString() == id && a.Password == password;
+        });
+        if (admin != null) return admin;
 
         return null;   
     }
 
     static void LoadData()
     {
-        doctors = FileManager.LoadDoctors();
-        patients = FileManager.LoadPatients(doctors);
-        admins = FileManager.LoadAdministrators();
-        appointments = FileManager.LoadAppointments(doctors, patients);
+        try
+        {
+            doctors = FileManager.LoadDoctors();
+            patients = FileManager.LoadPatients(doctors);
+            admins = FileManager.LoadAdministrators();
+            appointments = FileManager.LoadAppointments(doctors, patients);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading data: {ex.Message}");
+            Console.WriteLine("Press any key to exit");
+            Console.ReadKey();
+            Environment.Exit(1);
+        }
     }
 }

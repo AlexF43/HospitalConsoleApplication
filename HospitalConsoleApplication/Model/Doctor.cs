@@ -27,6 +27,7 @@ public class Doctor : User
         Console.Write("| ");
         Console.Write(Address);
         Utils.WriteSpaces(30-Address.Length);
+        Console.WriteLine();
     }
 
     public void ListDetails()
