@@ -19,5 +19,17 @@ public class Appointment
         string csvString = Doctor.Id + ", " + Patient.Id + ", " + Description;
         return csvString;
     }
+
+    public void DisplayDetails()
+    {
+        Console.Write(Doctor.Name);
+        Utils.WriteSpaces(30-Doctor.Name.Length);
+        Console.Write("| ");
+        Console.Write(Patient.Name);
+        Utils.WriteSpaces(30-Patient.Name.Length);
+        Console.Write("| ");
+        Console.Write(Description);
+        Console.WriteLine();
+    }
 }
 

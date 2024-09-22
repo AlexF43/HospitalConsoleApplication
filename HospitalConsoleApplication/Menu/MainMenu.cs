@@ -17,7 +17,7 @@ static class MainMenu
         Console.Clear();
         Utils.PageHeader("Login");
 
-        User? user = null;
+        BaseUser? user = null;
 
         do
         {
@@ -44,7 +44,7 @@ static class MainMenu
                 break;
             
             case Patient patient:
-                PatientMenu patientMenu = new PatientMenu(patient);
+                PatientMenu patientMenu = new PatientMenu(patient, appointments, doctors);
                 patientMenu.DisplayPatientMenu();
                 break;
             
@@ -74,7 +74,7 @@ static class MainMenu
         return password;
     }
 
-    public static User? Authentication(string id, string password, List<Patient> patients, List<Doctor> doctors)
+    public static BaseUser? Authentication(string id, string password, List<Patient> patients, List<Doctor> doctors)
     {
         var patient = patients.Find(p => p.Id.ToString() == id && p.Password == password);
         if (patient != null) return patient;

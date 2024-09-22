@@ -69,6 +69,21 @@ static class Utils
         Console.WriteLine();
     }
 
+    public static void AppointmentHeader()
+    {
+        Console.Write("Doctor");
+        WriteSpaces(24);
+        Console.Write("| ");
+        Console.Write("Patient");
+        WriteSpaces(23);
+        Console.Write("| ");
+        Console.Write("Description");
+        WriteSpaces(29);
+        Console.WriteLine();
+        WriteDashes(100);
+        Console.WriteLine();
+    }
+
     public static void PageHeader(string text)
     {
         int lengthBefore = (50-text.Length) / 2;

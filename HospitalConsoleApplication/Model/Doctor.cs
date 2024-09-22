@@ -28,6 +28,17 @@ public class Doctor : User
         Console.Write(Address);
         Utils.WriteSpaces(30-Address.Length);
     }
+
+    public void ListDetails()
+    {
+        Console.Write(Name);
+        Console.Write(" | ");
+        Console.Write(Email);
+        Console.Write(" | ");
+        Console.Write(PhoneNumber);
+        Console.Write(" | ");
+        Console.Write(Address);
+    }
     
     public override string ToCSVString()
     {
